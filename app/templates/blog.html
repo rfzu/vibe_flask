@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Блог{% endblock %}
+
+{% block content %}
+<h1>Блог</h1>
+<ul class="blog-list">
+    {% for post in posts %}
+    <li class="blog-list__item">
+        <a href="{{ url_for('main.blog_post', slug=post.slug) }}">
+            <strong>{{ post.title }}</strong>
+        </a>
+        <time datetime="{{ post.date }}">{{ post.date }}</time>
+        <p class="blog-list__excerpt">{{ post.excerpt }}</p>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

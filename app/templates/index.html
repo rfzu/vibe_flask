@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<h1>Vibe Flask</h1>
+<p>Добро пожаловать. Здесь вы найдёте информацию обо мне, обновляемые котировки Сбера и Совкомбанка и блог.</p>
+<ul class="links-list">
+    <li><a href="{{ url_for('main.about') }}">Обо мне</a></li>
+    <li><a href="{{ url_for('main.quotes') }}">Котировки Сбера и Совкомбанка</a></li>
+    <li><a href="{{ url_for('main.blog') }}">Блог</a></li>
+    <li><a href="{{ url_for('main.project') }}">О проекте</a></li>
+</ul>
+{% endblock %}

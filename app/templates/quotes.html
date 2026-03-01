@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Котировки Сбера и Совкомбанка{% endblock %}
+
+{% block content %}
+<h1>Котировки Сбера и Совкомбанка</h1>
+<p>Данные с Московской биржи (MOEX). Обновляйте страницу или нажмите кнопку ниже.</p>
+
+<button type="button" class="btn btn-refresh" id="refresh-quotes">Обновить котировки</button>
+
+<div class="quotes" id="quotes-container">
+    <table class="quotes-table">
+        <thead>
+            <tr>
+                <th>Бумага</th>
+                <th>Тикер</th>
+                <th>Цена (последняя)</th>
+                <th>Открытие</th>
+                <th>Мин</th>
+                <th>Макс</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for q in quotes %}
+            <tr data-ticker="{{ q.ticker }}">
+                <td>{{ q.name }}</td>
+                <td><strong>{{ q.ticker }}</strong></td>
+                <td class="quote-last">{% if q.get('last') is not none %}{{ "%.2f"|format(q.last) }} ₽{% else %}<span class="quote-error">{{ q.get('error', '—') }}</span>{% endif %}</td>
+                <td>{% if q.get('open') is not none %}{{ "%.2f"|format(q.open) }} ₽{% else %}—{% endif %}</td>
+                <td>{% if q.get('low') is not none %}{{ "%.2f"|format(q.low) }} ₽{% else %}—{% endif %}</td>
+                <td>{% if q.get('high') is not none %}{{ "%.2f"|format(q.high) }} ₽{% else %}—{% endif %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<p class="quotes-meta">Данные предоставлены Московской биржей. Котировки могут запаздывать.</p>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+    const btn = document.getElementById('refresh-quotes');
+    const container = document.getElementById('quotes-container');
+    if (!btn || !container) return;
+
+    btn.addEventListener('click', function() {
+        btn.disabled = true;
+        btn.textContent = 'Загрузка…';
+        fetch('{{ url_for("main.quotes_refresh") }}')
+            .then(r => r.json())
+            .then(quotes => {
+                const tbody = container.querySelector('tbody');
+                if (!tbody) return;
+                tbody.innerHTML = quotes.map(q => {
+                    const last = q.last != null ? (Number(q.last).toFixed(2) + ' ₽') : '<span class="quote-error">' + (q.error || '—') + '</span>';
+                    const open = q.open != null ? (Number(q.open).toFixed(2) + ' ₽') : '—';
+                    const low = q.low != null ? (Number(q.low).toFixed(2) + ' ₽') : '—';
+                    const high = q.high != null ? (Number(q.high).toFixed(2) + ' ₽') : '—';
+                    return '<tr data-ticker="' + q.ticker + '"><td>' + q.name + '</td><td><strong>' + q.ticker + '</strong></td><td class="quote-last">' + last + '</td><td>' + open + '</td><td>' + low + '</td><td>' + high + '</td></tr>';
+                }).join('');
+            })
+            .catch(() => { btn.textContent = 'Ошибка, повторить'; })
+            .finally(() => {
+                btn.disabled = false;
+                btn.textContent = 'Обновить котировки';
+            });
+    });
+})();
+</script>
+{% endblock %}

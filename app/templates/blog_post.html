@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<article class="blog-post">
+    <a href="{{ url_for('main.blog') }}" class="blog-post__back">← К списку постов</a>
+    <h1>{{ post.title }}</h1>
+    <time datetime="{{ post.date }}">{{ post.date }}</time>
+    <div class="blog-post__body">
+        <p>{{ post.excerpt }}</p>
+        <p>Здесь может быть полный текст поста (пока заглушка).</p>
+    </div>
+</article>
+{% endblock %}

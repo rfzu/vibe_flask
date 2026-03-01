@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Vibe Flask{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="nav">
+        <a class="nav__logo" href="{{ url_for('main.index') }}">Vibe Flask</a>
+        <ul class="nav__links">
+            <li><a href="{{ url_for('main.index') }}">Главная</a></li>
+            <li><a href="{{ url_for('main.about') }}">Обо мне</a></li>
+            <li><a href="{{ url_for('main.quotes') }}">Котировки</a></li>
+            <li><a href="{{ url_for('main.blog') }}">Блог</a></li>
+            <li><a href="{{ url_for('main.project') }}">О проекте</a></li>
+        </ul>
+    </nav>
+    <main class="main">
+        {% block content %}{% endblock %}
+    </main>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
