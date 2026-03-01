@@ -4,11 +4,12 @@
 
 {% block content %}
 <h1>Котировки Сбера и Совкомбанка</h1>
-<p>Данные с Московской биржи (MOEX). Обновляйте страницу или нажмите кнопку ниже.</p>
+<p class="quotes-intro">Данные с Московской биржи (MOEX). Обновляйте страницу или нажмите кнопку ниже.</p>
 
-<button type="button" class="btn btn-refresh" id="refresh-quotes">Обновить котировки</button>
+<button type="button" class="btn" id="refresh-quotes">Обновить котировки</button>
 
 <div class="quotes" id="quotes-container">
+    <div class="quotes-card">
     <table class="quotes-table">
         <thead>
             <tr>
@@ -33,6 +34,7 @@
             {% endfor %}
         </tbody>
     </table>
+    </div>
 </div>
 
 <p class="quotes-meta">Данные предоставлены Московской биржей. Котировки могут запаздывать.</p>
